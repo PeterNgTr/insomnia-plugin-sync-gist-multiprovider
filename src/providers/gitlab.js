@@ -62,6 +62,7 @@ class gitlab {
    * @returns boolean Tellls if the configuration is correct
    */
   loadConfig(config) {
+    this.config = []
     if( !typeof(config.token) === "string" || config.token == "" )
       throw "Invalid token";
     this.config.token = config.token
