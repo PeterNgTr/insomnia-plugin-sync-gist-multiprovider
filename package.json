@@ -1,18 +1,21 @@
 {
-  "name": "insomnia-plugin-gist-sync",
-  "version": "0.1.0",
-  "author": "João Miguel Ströher <joao.stroher@gmail.com>",
+  "name": "insomnia-plugin-multi-gist-sync",
+  "version": "0.0.1",
+  "authors": [
+    "João Miguel Ströher <joao.stroher@gmail.com>",
+    "Teo González Calzada <teo.gonzalez.c@hotmail.com>"
+  ],
   "description": "Gist Sync Plugin for Insomnia",
   "license": "MIT",
-  "repository": "https://github.com/joaostroher/insomnia-plugin-gist-sync",
+  "repository": "https://github.com/thblckjkr/insomnia-plugin-multi-gist-sync",
   "bugs": {
-    "url": "https://github.com/joaostroher/insomnia-plugin-gist-sync/issues"
+    "url": "https://github.com/thblckjkr/insomnia-plugin-multi-gist-sync/issues"
   },
   "main": "src/index.js",
   "insomnia": {
     "name": "gist-sync",
-    "displayName": "Gist Sync Plugin",
-    "description": "That plugin allows users sync workspaces with gist of GitHub.",
+    "displayName": "Multiprovider Gist Sync Plugin",
+    "description": "Plugin that allows users sync workspaces in a gist on GitHub and Gitlab.",
     "images": {
       "icon": "icon.svg"
     },

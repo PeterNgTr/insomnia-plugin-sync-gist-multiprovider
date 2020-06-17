@@ -1,6 +1,8 @@
 # Insomnia Gist Sync
 
-This is a plugin for [Insomnia](https://insomnia.rest) that allows users sync workspaces with gist of GitHub.
+> This is a fork of [gist-sync](https://github.com/joaostroher/insomnia-plugin-gist-sync) aimed to support storing gists on a self-hosted gitlab instance.
+
+This is a plugin for [Insomnia](https://insomnia.rest) that allows users sync workspaces with gist of GitHub and a self-hosted gitlab.
 
 ## Installation
 
@@ -8,17 +10,72 @@ Install the `insomnia-plugin-gist-sync` plugin from Preferences > Plugins.
 
 ## Configure
 
-1. Create a [personal access token](https://help.github.com/pt/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) to your GitHub account, with `gist` scope/permission.
+### 1. Create a personal access token.
 
-2. Go to Insomnia, click on Insomnia Main Menu, and click on "Gist Sync - Configure":
+[On your github account](https://help.github.com/pt/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with `gist` scope/permission.
+
+Or [in your Gitlab account](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#creating-a-personal-access-token) with the `api` scope.
+
+### 2. Go to Insomnia, click on Insomnia Main Menu, and click on "Gist Sync - Configure":
 
 ![Plugin Screenshot](/screenshot.jpg)
 
-3. Follow the steps, filling with GitHub API Key (generated on step 1), and after with your Gist ID (if you have used this plugin).
+Create and paste the corresponding configuration
 
-- If you kept Gist ID empty, will be generate a new private Gist on your account.
+#### Configuration options
+
+| Setting | Required | Description |
+| ------- | -------- | ----------- |
+| provider | true | Provider to store the gists. available values: `github`, `gitlab` |
+| token | true | Personal acces token of your provider. **NEVER SHARE IT** |
+| gistID | false | Gist ID where your data is stored. If not present, a new one will be automatically created |
+| baseURL | false | Gitlab only. URL of the gitlab instance you want to use. Default `https://gitlab.com` |
+| projectID | false | Gitlab only. If you want to save the snippet in a project level, set it to the project ID. Default `null` (Defaults to user level) |
+| visibility | false | Visibility of the snippet. Options `private`, `public`, `internal`. Default `private` |
+
+#### Configuration examples
+
+**For a github account**
+
+```json
+{
+  "provider": "github",
+  "token": "PERSONAL_ACCES_TOKEN",
+  "gistID": ""
+}
+```
+
+**For a self-managed gitlab account, in a project level**
+```json
+{
+  "provider": "gitlab",
+  "token":  "PERSONAL_ACCES_TOKEN",
+  "gistID": "",
+  "baseURL": "http://your.gitlab.ip",
+  "projectID": "1",
+  "visibility": "private"
+}
+```
+**For a self-managed gitlab account, in a user level**
+```json
+{
+  "provider": "gitlab",
+  "token": "PERSONAL_ACCES_TOKEN",
+  "gistID": "",
+  "baseURL": "http://your.gitlab.ip",
+  "visibility": "private"
+}
+```
 
 ## Usage
 
 - Click on "Gist Sync - Send" to send your workspaces to Gist.
 - Click on "Gist Sync - Receive" to get your workspaces from Gist.
+
+## TODO
+
+- [] Sync strategies (For multi-user support on gitlab projects)
+- [] Add atlassian provider (?)
+- [] Tests
+- [] Linting
+- [] CI/CD
