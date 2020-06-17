@@ -65,26 +65,26 @@ module.exports.workspaceActions = [
     action: async (context, models) => {
       const config = await loadConfig(context, false);
       if (!config) {
-        await context.app.alert(
-          'Configuration error',
-          'The GitHub API Key must be configured',
-        );
+        await context.app.alert( 'Configuration error', 'No configuration defined' );
         return;
       }
-      const gistKey = await promptGistKey(context, false);
-      if (!gistKey) {
-        if (!confirm('The Gist ID not informated, will be create a new Gist?'))
-          return;
-      }
+
+      // Load insomnia data
       const data = await context.data.export.insomnia({
         includePrivate: false,
         format: 'json',
       });
       const content = JSON.stringify(JSON.parse(data), null, 2);
-      if (!gistKey) {
-        provider.createGist(content);
-      } else {
-        provider.updateGist(content);
+
+      try {
+        if (!config.gistID) {
+          provider.createGist(content);
+        } else {
+          provider.updateGist(content);
+        }
+      } catch (e) {
+        await context.app.alert( 'Error', e.message );
+        return;
       }
     },
   },
@@ -92,31 +92,24 @@ module.exports.workspaceActions = [
     label: 'Gist Sync - Receive',
     icon: 'fa-download',
     action: async (context, models) => {
-      const apiKey = await promptApiKey(context, false);
-
-      if (!apiKey) {
-        await context.app.alert(
-          'Configuration error',
-          'The GitHub API Key must be configured',
-        );
+      const config = await loadConfig(context, false);
+      if (!config) {
+        await context.app.alert( 'Configuration error', 'No configuration defined' );
         return;
       }
 
-      const gistKey = await promptGistKey(context, false);
-      if (!gistKey) {
-        await context.app.alert(
-          'Configuration error',
-          'The Gist ID must be configured',
-        );
+      try{
+        const response = await provider.getGist();
+        const file = response.data.files['insomnia_data.json'];
+        if (!file.truncated) await context.data.import.raw(file.content);
+        else {
+          const rawResponse = await axios.get(file.raw_url);
+          const content = JSON.stringify(rawResponse.data);
+          await context.data.import.raw(content);
+        }
+      } catch (e) {
+        await context.app.alert( 'Error', e.message );
         return;
-      }
-      const response = await provider.getGist();
-      const file = response.data.files['insomnia_data.json'];
-      if (!file.truncated) await context.data.import.raw(file.content);
-      else {
-        const rawResponse = await axios.get(file.raw_url);
-        const content = JSON.stringify(rawResponse.data);
-        await context.data.import.raw(content);
       }
     },
   },
@@ -125,7 +118,6 @@ module.exports.workspaceActions = [
     icon: 'fa-cogs',
     action: async (context, models) => {
       await loadConfig(context, true);
-      // await promptGistKey(context, true);
     },
   },
 ];
