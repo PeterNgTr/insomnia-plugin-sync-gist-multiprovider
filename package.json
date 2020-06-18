@@ -1,5 +1,5 @@
 {
-  "name": "insomnia-plugin-multi-gist-sync",
+  "name": "insomnia-plugin-sync-gist-multiprovider",
   "version": "0.1.1",
   "authors": [
     "João Miguel Ströher <joao.stroher@gmail.com>",
@@ -7,9 +7,9 @@
   ],
   "description": "Gist Sync Plugin for Insomnia",
   "license": "MIT",
-  "repository": "https://github.com/thblckjkr/insomnia-plugin-multi-gist-sync",
+  "repository": "https://github.com/thblckjkr/insomnia-plugin-sync-gist-multiprovider",
   "bugs": {
-    "url": "https://github.com/thblckjkr/insomnia-plugin-multi-gist-sync/issues"
+    "url": "https://github.com/thblckjkr/insomnia-plugin-sync-gist-multiprovider/issues"
   },
   "main": "src/index.js",
   "insomnia": {

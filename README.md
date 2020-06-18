@@ -2,7 +2,7 @@
 
 Pull requests are welcome
 
-# Insomnia Gist Sync
+# Insomnia Multiprovider Gist Sync
 
 > This is a fork of [gist-sync](https://github.com/joaostroher/insomnia-plugin-gist-sync) aimed to support storing gists on a self-hosted gitlab instance, and some other providers
 
@@ -10,7 +10,7 @@ This is a plugin for [Insomnia](https://insomnia.rest) that allows users sync wo
 
 ## Installation
 
-Install the `insomnia-plugin-multi-gist-sync` plugin from Preferences > Plugins.
+Install the `insomnia-plugin-sync-gist-multiprovider` plugin from Preferences > Plugins.
 
 ## Configure
 
