@@ -3,22 +3,25 @@ const axios = require('axios');
 class gitlab {
   constructor (context, config) {
     this.context = context
-    this.config = this.loadConfig(config)
+    this.loadConfig(config)
   }
 
-  async authenticate() {
+  authenticate() {
     return axios.create({
       baseURL: `${this.config.base_url}/api/v4/`,
       timeout: 5000,
-      headers: { Authorization: `Bearer ${this.token}` },
+      headers: { Authorization: `Bearer ${this.config.token}` },
     });
   }
 
   async getGist(){
-    const response = await this.authenticate().get(
-      `${this.config.base_url}/api/v4/projects/${this.config.project_id}/snippets/${this.config.gist_id}/raw`
-    );
-    return response;
+    try {
+      const response = await this.authenticate().get(
+        `${this.config.base_url}/api/v4/projects/${this.config.project_id}/snippets/${this.config.gist_id}/raw`
+      );
+      return response;
+    }catch (e) {}
+    return null;
   }
 
   async createGist(content) {
@@ -59,7 +62,7 @@ class gitlab {
    * Validate is the configuration parameters are complete, and set defaults if required.
    * Then, save the configuration in the instance of the class
    * @param {configObject} config
-   * @returns boolean Tellls if the configuration is correct
+   * @returns boolean Tells if the configuration is correct
    */
   loadConfig(config) {
     this.config = []
@@ -90,8 +93,6 @@ class gitlab {
     } else {
       this.config.visibility = config.visibility;
     }
-
-    return true
   }
 }
 

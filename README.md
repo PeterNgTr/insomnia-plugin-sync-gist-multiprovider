@@ -1,6 +1,10 @@
+# WIP! IT ONLY WORKS FOR GITLAB SNIPPETS IN A PROJECT LEVEL
+
+Pull requests are welcome
+
 # Insomnia Gist Sync
 
-> This is a fork of [gist-sync](https://github.com/joaostroher/insomnia-plugin-gist-sync) aimed to support storing gists on a self-hosted gitlab instance.
+> This is a fork of [gist-sync](https://github.com/joaostroher/insomnia-plugin-gist-sync) aimed to support storing gists on a self-hosted gitlab instance, and some other providers
 
 This is a plugin for [Insomnia](https://insomnia.rest) that allows users sync workspaces with gist of GitHub and a self-hosted gitlab.
 
@@ -70,12 +74,18 @@ Paste the corresponding configuration
 - Click on "Gist Sync - Send" to send your workspaces to Gist.
 - Click on "Gist Sync - Receive" to get your workspaces from Gist.
 
+> Note on how conflict resolving is being made. Currently, when you press the *receive* button, it will get the remote, compare both remote and local for changes and store the newest modifications into a combination of both, this can lead to confusing edge cases. If you are really interested on preserving integrity working with a team, please [support insomnia](https://insomnia.rest/pricing/) with a team membership.
+
 ## TODO
 
-- [ ] Add github provider
-- [ ] Add gitlab user-level provider
-- [ ] Sync strategies (For multi-user support on gitlab projects)
-- [ ] Add atlassian provider (?)
-- [ ] Tests
-- [ ] Linting
-- [ ] CI/CD
+- [] Add gitlab user-level provider (fix current provider)
+- [] Add github provider
+- [] Fix Sync strategies edge cases (if any)
+- [] Add atlassian provider (?)
+- [] Tests
+- [] Linting
+- [] CI/CD
+
+> Naming variables is hard
+
+> *Possible edge case*: Being unable to delete items because of how conflicts are resolved
