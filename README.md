@@ -81,7 +81,7 @@ Paste the corresponding configuration
 - [] Add gitlab user-level provider (fix current provider)
 - [] Add github provider
 - [] Fix Sync strategies edge cases (if any)
-- [] Change the logo
+- [ X ] Change the logo
 - [] Add atlassian provider (?)
 - [] Tests
 - [] Linting
