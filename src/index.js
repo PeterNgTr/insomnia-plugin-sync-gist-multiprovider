@@ -148,7 +148,7 @@ module.exports.workspaceActions = [
 
       try{
         const file = await provider.getGist();
-        const remote = solveConflicts(context, file);
+        const remote = await solveConflicts(context, file.data);
 
         const content = JSON.stringify(remote);
         await context.data.import.raw(content);
