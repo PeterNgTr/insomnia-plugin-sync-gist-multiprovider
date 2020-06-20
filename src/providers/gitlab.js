@@ -21,8 +21,9 @@ class gitlab {
         `${this.config.api_url}/snippets/${this.config.gist_id}/raw`
       );
       return response.data;
-    }catch (e) {}
-    return null;
+    }catch (e) {
+      throw "Retreiving of the file failed"
+    }
   }
 
   async createGist(content) {
@@ -78,7 +79,7 @@ class gitlab {
     }
 
     if ( typeof(config.baseURL) !== "string" || config.baseURL == ""){
-      this.config.base_url = "https://gitlab.com/"
+      this.config.base_url = "https://gitlab.com"
     } else {
       this.config.base_url = config.baseURL;
     }
