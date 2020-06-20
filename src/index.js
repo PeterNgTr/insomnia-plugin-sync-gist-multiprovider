@@ -1,4 +1,5 @@
 const gitlab = require('./providers/gitlab.js');
+const github = require('./providers/github.js');
 
 // Global provier variable
 var provider;
@@ -48,8 +49,11 @@ function loadProvider(context, config){
   try {
     switch (config.provider) {
       case "gitlab":
-          provider = new gitlab(context, config);
-          break;
+        provider = new gitlab(context, config);
+        break;
+      case "github":
+        provider = new github(context, config);
+        break;
       default:
         context.app.alert( "Invalid configuration!", `Provider ${config.provider} not found` );
         return false;
@@ -131,7 +135,7 @@ module.exports.workspaceActions = [
           provider.updateGist(content);
         }
       } catch (e) {
-        await context.app.alert( 'Error', e.message );
+        await context.app.alert( 'Failed to send!', e.message );
         return;
       }
     },
@@ -153,7 +157,7 @@ module.exports.workspaceActions = [
         const content = JSON.stringify(remote);
         await context.data.import.raw(content);
       } catch (e) {
-        await context.app.alert( 'Error', e.message );
+        await context.app.alert( 'Failed to receive!', e.message );
         return;
       }
     },
