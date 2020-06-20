@@ -81,11 +81,11 @@ Paste the corresponding configuration
 - [] Add gitlab user-level provider (fix current provider)
 - [] Add github provider
 - [] Fix Sync strategies edge cases (if any)
-- [ X ] Change the logo
+- [X] Change the logo
 - [] Add atlassian provider (?)
 - [] Tests
 - [] Linting
-- [] CI/CD
+- [] CI/CD (Test and publish on merge request to release)
 
 > Naming variables is hard
 

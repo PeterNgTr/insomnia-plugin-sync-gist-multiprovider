@@ -4,11 +4,12 @@ class gitlab {
   constructor (context, config) {
     this.context = context
     this.loadConfig(config)
+    console.log("Loaded config@gitlab", this.config)
   }
 
   authenticate() {
     return axios.create({
-      baseURL: `${this.config.base_url}/api/v4/`,
+      baseURL: `${this.config.api_url}`,
       timeout: 5000,
       headers: { Authorization: `Bearer ${this.config.token}` },
     });
@@ -17,16 +18,16 @@ class gitlab {
   async getGist(){
     try {
       const response = await this.authenticate().get(
-        `${this.config.base_url}/api/v4/projects/${this.config.project_id}/snippets/${this.config.gist_id}/raw`
+        `${this.config.api_url}/snippets/${this.config.gist_id}/raw`
       );
-      return response;
+      return response.data;
     }catch (e) {}
     return null;
   }
 
   async createGist(content) {
     const response = await this.authenticate().post(
-      `${this.config.base_url}/api/v4/projects/${this.config.project_id}/snippets`,
+      `${this.config.api_url}/snippets`,
       {
         title: 'Insomnia sync data',
 
@@ -42,16 +43,16 @@ class gitlab {
 
     // Update saved config gist ID
     // TODO, move this to a provider interface, instead of modifying it per-provider
-    let conf = await context.store.getItem('gist-sync:config');
-    config = JSON.parse(conf);
+    let conf = await this.context.store.getItem('gist-sync:config');
+    let config = JSON.parse(conf);
     config.gistID = response.id
     conf = JSON.stringify(config)
-    await context.store.setItem('gist-sync:config', conf);
+    await this.context.store.setItem('gist-sync:config', conf);
   }
 
   async updateGist(content) {
     await this.authenticate().put(
-      `${this.config.base_url}/api/v4/projects/${this.config.project_id}/snippets/${this.config.gist_id}`,
+      `${this.config.api_url}/snippets/${this.config.gist_id}`,
       {
         content: content,
       },
@@ -66,32 +67,38 @@ class gitlab {
    */
   loadConfig(config) {
     this.config = []
-    if( !typeof(config.token) === "string" || config.token == "" )
+    if( typeof(config.token) !== "string" || config.token == "" )
       throw "Invalid token";
     this.config.token = config.token
 
-    if( !typeof(config.gistID) === "string" || config.gistID == "" ){
+    if( typeof(config.gistID) === undefined || config.gistID == "" ){
       this.config.gist_id = null;
     } else {
       this.config.gist_id = config.gistID;
     }
 
-    if ( !typeof(config.baseURL) === "string" || config.baseURL == ""){
-      this.base_url = "https://gitlab.com/"
+    if ( typeof(config.baseURL) !== "string" || config.baseURL == ""){
+      this.config.base_url = "https://gitlab.com/"
     } else {
       this.config.base_url = config.baseURL;
     }
 
-    if ( !typeof(config.projectID) === "string" || config.projectID == ""){
-      this.project_id = null
+    if ( typeof(config.projectID) !== "string" || config.projectID == ""){
+      this.config.project_id = null
     } else {
       this.config.project_id = config.projectID;
     }
 
-    if ( !typeof(config.visibility) === "string" || config.visibility == ""){
-      this.visibility = "private"
+    if ( typeof(config.visibility) !== "string" || config.visibility == "" ){
+      this.config.visibility = "private"
     } else {
       this.config.visibility = config.visibility;
+    }
+
+    if ( this.config.project_id === null ){
+      this.config.api_url = `${this.config.base_url}/api/v4`
+    } else {
+      this.config.api_url = `${this.config.base_url}/api/v4/projects/${this.config.project_id}`
     }
   }
 }

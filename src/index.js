@@ -125,7 +125,7 @@ module.exports.workspaceActions = [
       const content = JSON.stringify(JSON.parse(data), null, 2);
 
       try {
-        if (!config.gistID) {
+        if ( typeof(config.gistID) !== "string" || config.gistID == "" ) {
           provider.createGist(content);
         } else {
           provider.updateGist(content);
@@ -148,7 +148,7 @@ module.exports.workspaceActions = [
 
       try{
         const file = await provider.getGist();
-        const remote = await solveConflicts(context, file.data);
+        const remote = await solveConflicts(context, file);
 
         const content = JSON.stringify(remote);
         await context.data.import.raw(content);
