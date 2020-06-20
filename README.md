@@ -1,7 +1,3 @@
-# WIP! IT ONLY WORKS FOR GITLAB SNIPPETS IN A PROJECT LEVEL
-
-Pull requests are welcome
-
 # Insomnia Multiprovider Gist Sync
 
 > This is a fork of [gist-sync](https://github.com/joaostroher/insomnia-plugin-gist-sync) aimed to support storing gists on a self-hosted gitlab instance, and some other providers
@@ -78,14 +74,16 @@ Paste the corresponding configuration
 
 ## TODO
 
-- [] Add gitlab user-level provider (fix current provider)
-- [] Add github provider
-- [] Fix Sync strategies edge cases (if any)
+List of things todo.
+
+- [X] Add gitlab user-level provider (fix current provider)
+- [X] Add github provider
 - [X] Change the logo
-- [] Add atlassian provider (?)
-- [] Tests
-- [] Linting
-- [] CI/CD (Test and publish on merge request to release)
+- [ ] CI/CD (Test and publish on merge request to release)
+- [ ] Add atlassian provider (?)
+- [ ] Tests
+- [ ] Linting
+- [ ] Fix Sync strategies edge cases (if any)
 
 > Naming variables is hard
 
