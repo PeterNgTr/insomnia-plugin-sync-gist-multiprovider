@@ -61,16 +61,17 @@ Paste the corresponding configuration
 | provider | true | Provider to store the gists. available values: `github`, `gitlab` |
 | token | true | Personal acces token of your provider. **NEVER SHARE IT** |
 | gistID | false | Gist ID where your data is stored. If not present, a new one will be automatically created |
+| timeout | false | Request timeout in miliseconds. Default `3000` |
 | baseURL | false | Gitlab only. URL of the gitlab instance you want to use. Default `https://gitlab.com` |
 | projectID | false | Gitlab only. If you want to save the snippet in a project level, set it to the project ID. Default `null` (Defaults to user level) |
 | visibility | false | Visibility of the snippet. Options `private`, `public`, `internal`. Default `private` |
+
+> Note: Most of the parameters aren't strictly validated.
 
 ## Usage
 
 - Click on "Gist Sync - Send" to send your workspaces to Gist.
 - Click on "Gist Sync - Receive" to get your workspaces from Gist.
-
-> Note on how conflict resolving is being made. Currently, when you press the *receive* button, it will get the remote, compare both remote and local for changes and store the newest modifications into a combination of both, this can lead to confusing edge cases. If you are really interested on preserving integrity working with a team, please [support insomnia](https://insomnia.rest/pricing/) with a team membership.
 
 ## TODO
 
@@ -85,6 +86,21 @@ List of things todo.
 - [ ] Linting
 - [ ] Fix Sync strategies edge cases (if any)
 
-> Naming variables is hard
 
+> Note on how conflict resolving is being made. Currently, when you press the *receive* button, it will get the remote, compare both remote and local for changes and store the newest modifications into a combination of both, this can lead to confusing edge cases. If you are really interested on preserving integrity working with a team, please [support insomnia](https://insomnia.rest/pricing/) with a team membership.
+>
 > *Possible edge case*: Being unable to delete items because of how conflicts are resolved
+
+---
+
+**Support me**
+
+Do you have any bucks in your wallet that you don't really need? Great!
+
+You should consider donating to a charity or something more relevant.
+
+If you really want to support me instead, here is a way to do it.
+
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X315KOS)
+
+> Naming variables is hard

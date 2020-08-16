@@ -12,7 +12,7 @@ class github {
   authenticate() {
     return axios.create({
       baseURL: `${this.config.base_url}`,
-      timeout: 5000,
+      timeout: this.config.timeout,
       headers: { Authorization: `Bearer ${this.config.token}` },
     });
   }
@@ -83,20 +83,26 @@ class github {
    */
   loadConfig(config) {
 
-    if( !typeof(config.token) === "string" || config.token == "" )
+    if ( typeof(config.token) !== "string" || config.token == "" )
       throw "Invalid token";
     this.config.token = config.token
 
-    if( !typeof(config.gistID) === "string" || config.gistID == "" ){
+    if ( typeof(config.gistID) !== "string" || config.gistID == "" ){
       this.config.gist_id = null;
     } else {
       this.config.gist_id = config.gistID;
     }
 
-    if ( !typeof(config.visibility) === "string" || config.visibility == ""){
+    if ( typeof(config.visibility) !== "string" || config.visibility == ""){
       this.visibility = "private"
     } else {
       this.config.visibility = config.visibility;
+    }
+
+    if ( typeof(config.timeout) !== "number" || config.timeout == ""){
+      this.config.timeout = 5000;
+    } else {
+      this.config.timeout = config.timeout;
     }
   }
 }
