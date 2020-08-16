@@ -12,7 +12,7 @@ class github {
   authenticate() {
     return axios.create({
       baseURL: `${this.config.base_url}`,
-      timeout: 5000,
+      timeout: this.config.timeout,
       headers: { Authorization: `Bearer ${this.config.token}` },
     });
   }
@@ -97,6 +97,12 @@ class github {
       this.visibility = "private"
     } else {
       this.config.visibility = config.visibility;
+    }
+
+    if ( typeof(config.timeout) !== "number" || config.timeout == ""){
+      this.config.timeout = 5000;
+    } else {
+      this.config.timeout = config.timeout;
     }
   }
 }

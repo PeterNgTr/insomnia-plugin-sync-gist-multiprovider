@@ -10,7 +10,7 @@ class gitlab {
   authenticate() {
     return axios.create({
       baseURL: `${this.config.api_url}`,
-      timeout: 5000,
+      timeout: this.config.timeout,
       headers: { Authorization: `Bearer ${this.config.token}` },
     });
   }
@@ -100,6 +100,12 @@ class gitlab {
       this.config.api_url = `${this.config.base_url}/api/v4`
     } else {
       this.config.api_url = `${this.config.base_url}/api/v4/projects/${this.config.project_id}`
+    }
+
+    if ( typeof(config.timeout) !== "number" || config.timeout == ""){
+      this.config.timeout = 5000;
+    } else {
+      this.config.timeout = config.timeout;
     }
   }
 }
