@@ -80,10 +80,13 @@ List of things todo.
 - [X] Add gitlab user-level provider (fix current provider)
 - [X] Add github provider
 - [X] Change the logo
+- [ ] Change config options from json to a form (like joaostroher did)
+- [ ] Add an option to sync only some workspaces. Issue #3
 - [ ] CI/CD (Test and publish on merge request to release)
 - [ ] Add atlassian provider (?)
 - [ ] Tests
 - [ ] Linting
+- [ ] Redesign the logo
 - [ ] Fix Sync strategies edge cases (if any)
 
 
