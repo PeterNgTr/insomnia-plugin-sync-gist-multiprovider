@@ -125,6 +125,7 @@ module.exports.workspaceActions = [
       const data = await context.data.export.insomnia({
         includePrivate: false,
         format: 'json',
+        workspace: models.workspace,
       });
       const content = JSON.stringify(JSON.parse(data), null, 2);
 
