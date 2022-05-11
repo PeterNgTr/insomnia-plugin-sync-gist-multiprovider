@@ -48,3 +48,14 @@ test('public visibility', () => {
   });
   expect(gitlab.config.visibility).toEqual('public');
 });
+
+test('get gist - invalid id', async () => {
+  try {
+    const gitlab = new Gitlab({ }, {
+      token: '123', gistID: '123', baseURL: '', projectID: '123', visibility: 'public',
+    });
+    await gitlab.getGist();
+  } catch (e) {
+    expect(e.message).toEqual('Something went wrong: Request failed with status code 401');
+  }
+});

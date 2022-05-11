@@ -83,7 +83,7 @@ class Github {
     }
 
     if (typeof (config.visibility) !== 'string' || config.visibility === '') {
-      this.visibility = 'private';
+      this.config.visibility = 'private';
     } else {
       this.config.visibility = config.visibility;
     }
