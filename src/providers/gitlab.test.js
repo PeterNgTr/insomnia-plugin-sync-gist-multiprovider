@@ -59,7 +59,7 @@ test('get gist - invalid id', async () => {
     });
     await gitlab.getGist();
   } catch (e) {
-    expect(e.message).toEqual('Something went wrong: Request failed with status code 401');
+    expect(e.message).toEqual('Something went wrong: Request failed with status code 404');
   }
 });
 
