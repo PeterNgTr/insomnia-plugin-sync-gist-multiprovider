@@ -1,4 +1,7 @@
 const Gitlab = require('./gitlab');
+const axios = require('axios');
+const MockAdapter = require('axios-mock-adapter');
+const mock = new MockAdapter(axios);
 
 test('Invalid token', () => {
   try {
@@ -58,4 +61,22 @@ test('get gist - invalid id', async () => {
   } catch (e) {
     expect(e.message).toEqual('Something went wrong: Request failed with status code 401');
   }
+});
+
+test('get gist - valid id', async () => {
+    const gitlab = new Gitlab({ }, {
+      token: '123', gistID: '123', baseURL: '', projectID: '123', visibility: 'public',
+    });
+    mock.onGet(`https://gitlab.com/api/v4/projects/123/snippets/123/raw`).reply(200, { public_url: 'http://test.link.abc' } );
+    const t = await gitlab.getGist();
+    expect(t).toEqual({ public_url: 'http://test.link.abc' });
+});
+
+test('update gist - valid id', async () => {
+  const gitlab = new Gitlab({ }, {
+    token: '123', gistID: '123', baseURL: '', projectID: '123', visibility: 'public',
+  });
+  mock.onPut(`https://gitlab.com/api/v4/projects/123/snippets/123`).reply(200, { } );
+  const t = await gitlab.updateGist({});
+  expect(t).toEqual('Gist is updated');
 });

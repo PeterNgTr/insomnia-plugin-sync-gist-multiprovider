@@ -48,6 +48,7 @@ class Gitlab {
         content,
       },
     );
+    return 'Gist is updated';
   }
 
   /**
