@@ -1,44 +1,35 @@
-const axios = require('axios');
+const RestHelper = require('../helpers/apiHelper');
 
-class github {
-  constructor (context, config) {
+class Github {
+  constructor(context, config) {
     this.config = [];
-    this.context = context
+    this.context = context;
 
-    this.config.api_url = `https://api.github.com`
-    this.loadConfig(config)
+    this.config.apiURL = 'https://api.github.com';
+    this.loadConfig(config);
+    this.api = new RestHelper(this.config);
   }
 
-  authenticate() {
-    return axios.create({
-      baseURL: `${this.config.base_url}`,
-      timeout: this.config.timeout,
-      headers: { Authorization: `Bearer ${this.config.token}` },
-    });
-  }
-
-  async getGist(){
+  async getGist() {
     try {
-      const response = await this.authenticate().get(
-        `${this.config.api_url}/gists/${this.config.gist_id}`,
+      const response = await this.api.get(
+        `${this.config.apiURL}/gists/${this.config.gistID}`,
       );
 
       const file = response.data.files['insomnia_data.json'];
-      if (!file.truncated){
+      if (!file.truncated) {
         return JSON.parse(file.content);
-      } else {
-        const rawFile = await axios.get(file.raw_url);
-        return rawFile
       }
-    }catch (e) {
+      return this.api.get(file.raw_url);
+    } catch (e) {
       console.log(e);
-      throw "Retreiving of the file failed"
+      throw new Error('Retrieving the file failed');
     }
   }
 
   async createGist(content) {
-    const response = await this.authenticate().post(
-      `${this.config.api_url}/gists`,
+    const response = await this.api.post(
+      `${this.config.apiURL}/gists`,
       {
         files: {
           'insomnia_data.json': {
@@ -51,20 +42,20 @@ class github {
     );
 
     // Update gist ID on config
-    this.config.gist_id = response.data.id
+    this.config.gistID = response.id;
 
     // Update saved config gist ID
     // TODO, move this to a provider interface, instead of modifying it per-provider
     let conf = await this.context.store.getItem('gist-sync:config');
-    let config = JSON.parse(conf);
-    config.gistID = response.data.id
-    conf = JSON.stringify(config)
+    const config = JSON.parse(conf);
+    config.gistID = response.id;
+    conf = JSON.stringify(config);
     await this.context.store.setItem('gist-sync:config', conf);
   }
 
   async updateGist(content) {
-    await this.authenticate().patch(
-      `${this.config.api_url}/gists/${this.config.gist_id}`,
+    await this.api.patch(
+      `${this.config.apiURL}/gists/${this.config.gistID}`,
       {
         files: {
           'insomnia_data.json': {
@@ -82,24 +73,22 @@ class github {
    * @returns boolean Tells if the configuration is correct
    */
   loadConfig(config) {
+    if (typeof (config.token) !== 'string' || config.token === '') throw new Error('Invalid token');
+    this.config.token = config.token;
 
-    if ( typeof(config.token) !== "string" || config.token == "" )
-      throw "Invalid token";
-    this.config.token = config.token
-
-    if ( typeof(config.gistID) !== "string" || config.gistID == "" ){
-      this.config.gist_id = null;
+    if (typeof (config.gistID) !== 'string' || config.gistID === '') {
+      this.config.gistID = null;
     } else {
-      this.config.gist_id = config.gistID;
+      this.config.gistID = config.gistID;
     }
 
-    if ( typeof(config.visibility) !== "string" || config.visibility == ""){
-      this.visibility = "private"
+    if (typeof (config.visibility) !== 'string' || config.visibility === '') {
+      this.visibility = 'private';
     } else {
       this.config.visibility = config.visibility;
     }
 
-    if ( typeof(config.timeout) !== "number" || config.timeout == ""){
+    if (typeof (config.timeout) !== 'number' || config.timeout === '') {
       this.config.timeout = 5000;
     } else {
       this.config.timeout = config.timeout;
@@ -107,4 +96,4 @@ class github {
   }
 }
 
-module.exports = github
+module.exports = Github;
