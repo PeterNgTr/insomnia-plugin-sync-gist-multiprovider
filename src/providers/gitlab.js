@@ -62,7 +62,7 @@ class Gitlab {
     if (typeof (config.token) !== 'string' || config.token === '') throw new Error('Invalid token');
     this.config.token = config.token;
 
-    if (typeof (config.gistID) === 'string' || config.gistID === '') {
+    if (typeof (config.gistID) !== 'string' || config.gistID === '') {
       this.config.gistID = null;
     } else {
       this.config.gistID = config.gistID;
