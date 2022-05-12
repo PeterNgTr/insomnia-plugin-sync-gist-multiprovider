@@ -16,7 +16,7 @@ class Github {
         `${this.config.apiURL}/gists/${this.config.gistID}`,
       );
 
-      const file = response.data.files['insomnia_data.json'];
+      const file = response.files['insomnia_data.json'];
       if (!file.truncated) {
         return JSON.parse(file.content);
       }

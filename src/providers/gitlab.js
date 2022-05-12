@@ -34,7 +34,7 @@ class Gitlab {
 
     // Update saved config gist ID
     // TODO, move this to a provider interface, instead of modifying it per-provider
-    let conf = await this.context.store.getItem('gist-sync:config');
+    let conf = this.context.store.getItem('gist-sync:config');
     const config = JSON.parse(conf);
     config.gistID = response.id;
     conf = JSON.stringify(config);

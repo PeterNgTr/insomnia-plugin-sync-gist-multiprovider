@@ -80,3 +80,39 @@ test('update gist - valid id', async () => {
   const t = await gitlab.updateGist({});
   expect(t).toEqual('Gist is updated');
 });
+
+test('create gist', async () => {
+
+  const config = {
+    token: '123',
+    gistID: '123',
+    baseURL: 'https://gitlab.com',
+    projectID: '123',
+    visibility: 'public',
+    apiURL: 'https://gitlab.com/api/v4/projects/123',
+    timeout: 5000
+  }
+
+  const localStorageMock = (function() {
+    return {
+      store: {
+
+        getItem(key) {
+          return JSON.stringify(config);
+        },
+
+        setItem(key, value) {
+          let store = { 'gist-sync:config': config };
+          store[key] = value.toString();
+        },
+      }
+    }
+  })();
+
+  const gitlab = new Gitlab(localStorageMock, {
+    token: '123', gistID: '123', baseURL: '', projectID: '123', visibility: 'public',
+  });
+  mock.onPost(`https://gitlab.com/api/v4/projects/123/snippets`).reply(200, { } );
+  const t = await gitlab.createGist({});
+  expect(t).toEqual(undefined);
+});
