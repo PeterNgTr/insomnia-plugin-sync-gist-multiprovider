@@ -1,6 +1,7 @@
-const Gitlab = require('./gitlab');
 const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
+const Gitlab = require('./gitlab');
+
 const mock = new MockAdapter(axios);
 
 test('Invalid token', () => {
@@ -64,25 +65,24 @@ test('get gist - invalid id', async () => {
 });
 
 test('get gist - valid id', async () => {
-    const gitlab = new Gitlab({ }, {
-      token: '123', gistID: '123', baseURL: '', projectID: '123', visibility: 'public',
-    });
-    mock.onGet(`https://gitlab.com/api/v4/projects/123/snippets/123/raw`).reply(200, { public_url: 'http://test.link.abc' } );
-    const t = await gitlab.getGist();
-    expect(t).toEqual({ public_url: 'http://test.link.abc' });
+  const gitlab = new Gitlab({ }, {
+    token: '123', gistID: '123', baseURL: '', projectID: '123', visibility: 'public',
+  });
+  mock.onGet('https://gitlab.com/api/v4/projects/123/snippets/123/raw').reply(200, { public_url: 'http://test.link.abc' });
+  const t = await gitlab.getGist();
+  expect(t).toEqual({ public_url: 'http://test.link.abc' });
 });
 
 test('update gist - valid id', async () => {
   const gitlab = new Gitlab({ }, {
     token: '123', gistID: '123', baseURL: '', projectID: '123', visibility: 'public',
   });
-  mock.onPut(`https://gitlab.com/api/v4/projects/123/snippets/123`).reply(200, { } );
+  mock.onPut('https://gitlab.com/api/v4/projects/123/snippets/123').reply(200, { });
   const t = await gitlab.updateGist({});
   expect(t).toEqual('Gist is updated');
 });
 
 test('create gist', async () => {
-
   const config = {
     token: '123',
     gistID: '123',
@@ -90,29 +90,30 @@ test('create gist', async () => {
     projectID: '123',
     visibility: 'public',
     apiURL: 'https://gitlab.com/api/v4/projects/123',
-    timeout: 5000
-  }
+    timeout: 5000,
+  };
 
-  const localStorageMock = (function() {
+  const localStorageMock = (function () {
     return {
       store: {
 
         getItem(key) {
-          return JSON.stringify(config);
+          const store = { 'gist-sync:config': config };
+          return JSON.stringify(store[key]);
         },
 
         setItem(key, value) {
-          let store = { 'gist-sync:config': config };
+          const store = { 'gist-sync:config': config };
           store[key] = value.toString();
         },
-      }
-    }
-  })();
+      },
+    };
+  }());
 
   const gitlab = new Gitlab(localStorageMock, {
     token: '123', gistID: '123', baseURL: '', projectID: '123', visibility: 'public',
   });
-  mock.onPost(`https://gitlab.com/api/v4/projects/123/snippets`).reply(200, { } );
+  mock.onPost('https://gitlab.com/api/v4/projects/123/snippets').reply(200, { });
   const t = await gitlab.createGist({});
   expect(t).toEqual(undefined);
 });

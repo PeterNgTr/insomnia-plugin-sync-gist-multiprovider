@@ -1,6 +1,7 @@
-const Github = require('./github');
 const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
+const Github = require('./github');
+
 const mock = new MockAdapter(axios);
 
 test('Invalid token', () => {
@@ -55,51 +56,51 @@ test('get gist - valid id', async () => {
   const gitHub = new Github({ }, {
     token: '123', gistID: '123', baseURL: '', projectID: '123', visibility: 'public',
   });
-  mock.onGet(`https://api.github.com/gists/123`).reply(200, { files: {'insomnia_data.json': { content: JSON.stringify({'hello': '123'}) } } } );
+  mock.onGet('https://api.github.com/gists/123').reply(200, { files: { 'insomnia_data.json': { content: JSON.stringify({ hello: '123' }) } } });
   const t = await gitHub.getGist();
-  expect(t).toEqual({ "hello": "123" });
+  expect(t).toEqual({ hello: '123' });
 });
 
 test('update gist - valid id', async () => {
   const gitHub = new Github({ }, {
     token: '123', gistID: '123', baseURL: '', projectID: '123', visibility: 'public',
   });
-  mock.onPatch(`https://api.github.com/gists/123`).reply(200, { } );
+  mock.onPatch('https://api.github.com/gists/123').reply(200, { });
   const t = await gitHub.updateGist({});
   expect(t).toEqual(undefined);
 });
 
 test('create gist', async () => {
-
   const config = {
     token: '123',
     gistID: '123',
     projectID: '123',
     visibility: 'public',
     apiURL: 'https://api.github.com',
-    timeout: 5000
-  }
+    timeout: 5000,
+  };
 
-  const localStorageMock = (function() {
+  const localStorageMock = (function () {
     return {
       store: {
 
         getItem(key) {
-          return JSON.stringify(config);
+          const store = { 'gist-sync:config': config };
+          return JSON.stringify(store[key]);
         },
 
         setItem(key, value) {
-          let store = { 'gist-sync:config': config };
+          const store = { 'gist-sync:config': config };
           store[key] = value.toString();
         },
-      }
-    }
-  })();
+      },
+    };
+  }());
 
   const gitHub = new Github(localStorageMock, {
     token: '123', visibility: 'public',
   });
-  mock.onPost(`https://api.github.com/gists`).reply(200, { } );
+  mock.onPost('https://api.github.com/gists').reply(200, { });
   const t = await gitHub.createGist({});
   expect(t).toEqual(undefined);
 });
