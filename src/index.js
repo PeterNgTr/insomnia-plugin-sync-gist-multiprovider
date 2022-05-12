@@ -133,9 +133,9 @@ module.exports.workspaceActions = [
 
       try {
         if (typeof (config.gistID) !== 'string' || config.gistID === '') {
-          provider.createGist(content);
+          await provider.createGist(content);
         } else {
-          provider.updateGist(content);
+          await provider.updateGist(content);
         }
       } catch (e) {
         await context.app.alert('Failed to send!', e.message);
